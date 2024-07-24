@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jogo de Identificação de Problemas em Computadores</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+      margin-bottom: 20px;
+    }
+    .respostas {
+      margin-top: 20px;
+    }
+    .respostas button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Jogo de Identificação de Problemas em Computadores</h1>
+    <div id="fase">
+      <!-- Conteúdo da fase será inserido dinamicamente aqui -->
+    </div>
+    <div class="respostas">
+      <button id="resposta1"></button>
+      <button id="resposta2"></button>
+      <button id="resposta3"></button>
+      <button id="resposta4"></button>
+    </div>
+  </div>
+
+  <script>
+// Definição das fases e respostas
+const gameData = [
+  {
+    fase: "Fase 1: Problema de Conexão de Cabos",
+    problema: "Um computador com cabos desconectados.",
+    imagem: "imagens/fase1.jfif",
+    respostas: [
+      "Reconectar os cabos.",
+      "Trocar a placa-mãe.",
+      "Atualizar o sistema operacional.",
+      "Aumentar a memória RAM."
+    ]
+  },
+  {
+    fase: "Fase 2: Problema de RAM",
+    problema: "Um computador com uma placa de RAM solta.",
+    imagem: "imagens/fase2.jfif",
+    respostas: [
+      "Reencaixar a RAM.",
+      "Atualizar o antivírus.",
+      "Trocar o processador.",
+      "Formatar o disco rígido."
+    ]
+  },
+  {
+    fase: "Fase 3: Problema de Sobreaquecimento",
+    problema: "Um computador com superaquecimento e ventoinha parada.",
+    imagem: "imagens/fase3.jfif",
+    respostas: [
+      "Limpar e ventilar o computador.",
+      "Aumentar a resolução da tela.",
+      "Desinstalar programas desnecessários.",
+      "Trocar o monitor."
+    ]
+  },
+  {
+    fase: "Fase 4: Problema de Disco Rígido",
+    problema: "Um computador com um disco rígido danificado.",
+    imagem: "imagens/fase4.jfif",
+    respostas: [
+      "Substituir o disco rígido.",
+      "Atualizar os drivers de áudio.",
+      "Aumentar a capacidade da memória RAM.",
+      "Limpar a pasta de downloads."
+    ]
+  },
+  {
+    fase: "Fase 5: Problema de Fonte de Alimentação",
+    problema: "Um computador com uma fonte de alimentação queimada.",
+    imagem: "imagens/fase5.jfif",
+    respostas: [
+      "Trocar a fonte de alimentação.",
+      "Atualizar o navegador de internet.",
+      "Aumentar o brilho da tela.",
+      "Desfragmentar o disco rígido."
+    ]
+  }
+];
+
+// Função para embaralhar o array de respostas
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+// Índice da fase atual
+let faseAtualIndex = 0;
+
+// Função para exibir uma fase específica
+function exibirFase(numeroFase) {
+  const faseAtual = gameData[numeroFase - 1];
+  const respostaCorreta = faseAtual.respostas[0]; // Armazenar a resposta correta
+
+  // Embaralhar as respostas antes de exibir
+  const respostasEmbaralhadas = shuffleArray(faseAtual.respostas.slice());
+
+  // Exibir a imagem da fase
+  const imagemElement = document.createElement('img');
+  imagemElement.src = faseAtual.imagem;
+  imagemElement.alt = faseAtual.fase;
+  document.getElementById('fase').innerHTML = ''; // Limpar conteúdo anterior
+  document.getElementById('fase').appendChild(imagemElement);
+
+  // Exibir o título da fase e o problema
+  const faseTituloElement = document.createElement('h2');
+  faseTituloElement.textContent = faseAtual.fase;
+  document.getElementById('fase').appendChild(faseTituloElement);
+
+  const problemaElement = document.createElement('p');
+  problemaElement.textContent = "Problema: " + faseAtual.problema;
+  document.getElementById('fase').appendChild(problemaElement);
+
+  // Exibir as opções de respostas
+  const respostasElement = document.querySelector('.respostas');
+  respostasEmbaralhadas.forEach((resposta, index) => {
+    const respostaButton = document.getElementById(`resposta${index + 1}`);
+    respostaButton.textContent = resposta;
+    respostaButton.onclick = () => verificarResposta(resposta, respostaCorreta);
+  });
+}
+
+// Função para verificar a resposta do jogador
+function verificarResposta(respostaEscolhida, respostaCorreta) {
+  if (respostaEscolhida === respostaCorreta) {
+    alert("Resposta correta! Parabéns!");
+    proximaFase(); // Avança para a próxima fase
+  } else {
+    alert("Resposta incorreta! Tente novamente.");
+  }
+}
+
+// Função para avançar para a próxima fase
+function proximaFase() {
+  faseAtualIndex++;
+  if (faseAtualIndex < gameData.length) {
+    exibirFase(faseAtualIndex + 1);
+  } else {
+    alert("Parabéns! Você completou todas as fases.");
+    // Reiniciar ou finalizar o jogo
+    faseAtualIndex = 0; // Reiniciar o jogo
+    exibirFase(1); // Voltar para a primeira fase
+  }
+}
+
+// Exemplo de uso: exibir a primeira fase ao carregar a página
+exibirFase(1);
+
+  </script>
+</body>
+</html>

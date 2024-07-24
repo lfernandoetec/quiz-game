@@ -1,5 +1,6 @@
 # quiz-game
 Quiz Game em javascript
+[acesse aqui](https://lfernandoetec.github.io/quiz-game/)
 ***
 # Prompt do bing
 gere uma imagem em estilo carton para um jogo de problemas no hardware que represente Problema de Fonte de Alimentação
